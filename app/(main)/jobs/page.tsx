@@ -1,7 +1,7 @@
 "use client"
 import { Search, SlidersHorizontal, MapPin, Briefcase, X } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
 import JobCard from "@/components/jobs/JobCard"
 
 const jobTypes = [
@@ -14,7 +14,7 @@ const jobTypes = [
 
 const categories = ["Engineering", "Design", "Marketing", "Finance", "Sales", "HR"]
 
-export default function JobsPage() {
+function JobsContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [jobs, setJobs] = useState<any[]>([])
@@ -211,5 +211,13 @@ export default function JobsPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function JobsPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center">Loading jobs...</div>}>
+      <JobsContent />
+    </Suspense>
   )
 }
