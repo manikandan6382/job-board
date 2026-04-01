@@ -81,7 +81,7 @@ function AutocompleteField({
         autoComplete="off"
       />
       {show && filtered.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl z-50 overflow-hidden">
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl z-50">
           {filtered.map((item) => (
             <button
               key={item}
@@ -132,7 +132,7 @@ export default function HeroSearch() {
         />
         <button
           type="submit"
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3.5 font-semibold text-sm transition-colors flex items-center justify-center gap-2 shrink-0"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3.5 font-semibold text-sm transition-colors flex items-center justify-center gap-2 shrink-0 md:rounded-r-2xl rounded-b-2xl md:rounded-l-none  "
         >
           <Search className="w-4 h-4" />
           Search
