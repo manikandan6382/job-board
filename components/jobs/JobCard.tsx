@@ -1,19 +1,19 @@
-import Link from "next/link"
-import { MapPin, Clock, IndianRupee } from "lucide-react"
-import { timeAgo } from "@/lib/utils"
+import Link from "next/link";
+import { MapPin, Clock, IndianRupee } from "lucide-react";
+import { timeAgo } from "@/lib/utils";
 
 interface JobCardProps {
   job: {
-    id: string
-    title: string
-    company: string
-    logo?: string | null
-    location: string
-    type: string
-    salary?: string | null
-    createdAt: Date
-    category: string
-  }
+    id: string;
+    title: string;
+    company: string;
+    logo?: string | null;
+    location: string;
+    type: string;
+    salary?: string | null;
+    createdAt: Date;
+    category: string;
+  };
 }
 
 const companyColors = [
@@ -25,24 +25,24 @@ const companyColors = [
   "from-rose-500 to-pink-600",
   "from-amber-500 to-orange-600",
   "from-teal-500 to-cyan-600",
-]
+];
 
 const typeBadgeColors: Record<string, string> = {
-  FULL_TIME: "bg-green-100 text-green-700",
-  PART_TIME: "bg-yellow-100 text-yellow-700",
-  REMOTE: "bg-blue-100 text-blue-700",
-  CONTRACT: "bg-purple-100 text-purple-700",
-  INTERNSHIP: "bg-orange-100 text-orange-700",
-}
+  FULL_TIME: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
+  PART_TIME: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400",
+  REMOTE: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+  CONTRACT: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
+  INTERNSHIP: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400",
+};
 
 export default function JobCard({ job }: JobCardProps) {
-  const colorIndex = job.company.charCodeAt(0) % companyColors.length
-  const gradient = companyColors[colorIndex]
-  const badgeColor = typeBadgeColors[job.type] || "bg-slate-100 text-slate-700"
+  const colorIndex = job.company.charCodeAt(0) % companyColors.length;
+  const gradient = companyColors[colorIndex];
+  const badgeColor = typeBadgeColors[job.type] || "bg-slate-100 text-slate-700";
 
   return (
     <Link href={`/jobs/${job.id}`} className="block h-full">
-      <div className="group h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-200 flex flex-col gap-4">
+      <div className="group h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 hover:border-blue-400 dark:hover:border-blue-600 hover:shadow-md hover:shadow-blue-500/10 transition-all duration-200 flex flex-col gap-4">
 
         {/* Top Row */}
         <div className="flex items-start justify-between gap-3">
@@ -59,9 +59,7 @@ export default function JobCard({ job }: JobCardProps) {
           <h3 className="font-semibold text-slate-900 dark:text-white text-base leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 mb-1">
             {job.title}
           </h3>
-          <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
-            {job.company}
-          </p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">{job.company}</p>
         </div>
 
         {/* Bottom Row */}
@@ -87,5 +85,5 @@ export default function JobCard({ job }: JobCardProps) {
         </div>
       </div>
     </Link>
-  )
+  );
 }

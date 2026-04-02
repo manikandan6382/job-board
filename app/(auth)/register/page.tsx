@@ -1,54 +1,59 @@
-"use client"
-import Link from "next/link"
-import { signIn } from "next-auth/react"
-import { Briefcase, Eye, EyeOff } from "lucide-react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+"use client";
+import Link from "next/link";
+import { signIn } from "next-auth/react";
+import { Briefcase, Eye, EyeOff } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const schema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().min(1, "Email is required").email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   role: z.enum(["CANDIDATE", "EMPLOYER"]),
-})
+});
 
-type FormData = z.infer<typeof schema>
+type FormData = z.infer<typeof schema>;
 
 export default function RegisterPage() {
-  const router = useRouter()
-  const [showPassword, setShowPassword] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: { role: "CANDIDATE" },
-  })
+  });
+
+  const selectedRole = watch("role");
 
   const onSubmit = async (data: FormData) => {
-    setLoading(true)
-    setError("")
+    setLoading(true);
+    setError("");
     try {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
-      })
-      const result = await res.json()
+      });
+      const result = await res.json();
       if (!res.ok) {
-        setError(result.error || "Registration failed")
-        return
+        setError(result.error || "Registration failed");
+        return;
       }
-      await signIn("credentials", { email: data.email, password: data.password, callbackUrl: "/" })
+      await signIn("credentials", { email: data.email, password: data.password, callbackUrl: "/" });
     } catch {
-      setError("Something went wrong. Please try again.")
+      setError("Something went wrong. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
+
+  const inputClass = (hasError: boolean) =>
+    `w-full px-3 py-2.5 text-sm rounded-xl border bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${hasError ? "border-red-400" : "border-slate-200 dark:border-slate-700"}`;
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center px-4 py-12">
@@ -56,7 +61,7 @@ export default function RegisterPage() {
 
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2.5 mb-6">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+            <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
               <Briefcase className="w-5 h-5 text-white" />
             </div>
             <span className="font-bold text-xl text-slate-900 dark:text-white">JobBoard</span>
@@ -104,8 +109,8 @@ export default function RegisterPage() {
               <input
                 {...register("name")}
                 type="text"
-                placeholder="Manikandan M"
-                className={`w-full px-3 py-2.5 text-sm rounded-xl border bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${errors.name ? "border-red-400" : "border-slate-200 dark:border-slate-700"}`}
+                placeholder="Your full name"
+                className={inputClass(!!errors.name)}
               />
               {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>}
             </div>
@@ -118,7 +123,7 @@ export default function RegisterPage() {
                 {...register("email")}
                 type="email"
                 placeholder="you@example.com"
-                className={`w-full px-3 py-2.5 text-sm rounded-xl border bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${errors.email ? "border-red-400" : "border-slate-200 dark:border-slate-700"}`}
+                className={inputClass(!!errors.email)}
               />
               {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
             </div>
@@ -132,26 +137,42 @@ export default function RegisterPage() {
                   {...register("password")}
                   type={showPassword ? "text" : "password"}
                   placeholder="Min. 6 characters"
-                  className={`w-full px-3 py-2.5 pr-10 text-sm rounded-xl border bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${errors.password ? "border-red-400" : "border-slate-200 dark:border-slate-700"}`}
+                  className={inputClass(!!errors.password) + " pr-10"}
                 />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
               {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password.message}</p>}
             </div>
 
+            {/* Role Toggle */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                 I am a <span className="text-red-500">*</span>
               </label>
-              <select
-                {...register("role")}
-                className="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
-              >
-                <option value="CANDIDATE">Job Seeker</option>
-                <option value="EMPLOYER">Employer / Hiring</option>
-              </select>
+              <input type="hidden" {...register("role")} />
+              <div className="grid grid-cols-2 gap-3">
+                {(["CANDIDATE", "EMPLOYER"] as const).map((role) => (
+                  <button
+                    key={role}
+                    type="button"
+                    onClick={() => setValue("role", role)}
+                    className={`py-2.5 px-4 rounded-xl text-sm font-semibold border-2 transition-all ${
+                      selectedRole === role
+                        ? "border-blue-600 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400"
+                        : "border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-600"
+                    }`}
+                  >
+                    {role === "CANDIDATE" ? "Job Seeker" : "Employer"}
+                  </button>
+                ))}
+              </div>
+              {errors.role && <p className="mt-1 text-xs text-red-500">{errors.role.message}</p>}
             </div>
 
             <button
@@ -166,9 +187,11 @@ export default function RegisterPage() {
 
         <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-6">
           Already have an account?{" "}
-          <Link href="/login" className="text-blue-600 hover:text-blue-700 dark:text-blue-400 font-medium">Sign in</Link>
+          <Link href="/login" className="text-blue-600 hover:text-blue-700 dark:text-blue-400 font-medium">
+            Sign in
+          </Link>
         </p>
       </div>
     </div>
-  )
+  );
 }

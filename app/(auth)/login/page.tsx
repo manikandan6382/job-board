@@ -1,46 +1,49 @@
-"use client"
-import Link from "next/link"
-import { signIn } from "next-auth/react"
-import { Briefcase, Eye, EyeOff } from "lucide-react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+"use client";
+import Link from "next/link";
+import { signIn } from "next-auth/react";
+import { Briefcase, Eye, EyeOff } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const schema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
-})
+});
 
-type FormData = z.infer<typeof schema>
+type FormData = z.infer<typeof schema>;
 
 export default function LoginPage() {
-  const router = useRouter()
-  const [showPassword, setShowPassword] = useState(false)
-  const [authError, setAuthError] = useState("")
-  const [loading, setLoading] = useState(false)
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const [authError, setAuthError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
-  })
+  });
 
   const onSubmit = async (data: FormData) => {
-    setLoading(true)
-    setAuthError("")
+    setLoading(true);
+    setAuthError("");
     const result = await signIn("credentials", {
       email: data.email,
       password: data.password,
       redirect: false,
-    })
-    setLoading(false)
+    });
+    setLoading(false);
     if (result?.error) {
-      setAuthError("Invalid email or password")
+      setAuthError("Invalid email or password");
     } else {
-      router.push("/")
-      router.refresh()
+      router.push("/");
+      router.refresh();
     }
-  }
+  };
+
+  const inputClass = (hasError: boolean) =>
+    `w-full px-3 py-2.5 text-sm rounded-xl border bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${hasError ? "border-red-400" : "border-slate-200 dark:border-slate-700"}`;
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center px-4 py-12">
@@ -48,7 +51,7 @@ export default function LoginPage() {
 
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2.5 mb-6">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+            <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
               <Briefcase className="w-5 h-5 text-white" />
             </div>
             <span className="font-bold text-xl text-slate-900 dark:text-white">JobBoard</span>
@@ -97,7 +100,7 @@ export default function LoginPage() {
                 {...register("email")}
                 type="email"
                 placeholder="you@example.com"
-                className={`w-full px-3 py-2.5 text-sm rounded-xl border bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${errors.email ? "border-red-400" : "border-slate-200 dark:border-slate-700"}`}
+                className={inputClass(!!errors.email)}
               />
               {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
             </div>
@@ -107,16 +110,22 @@ export default function LoginPage() {
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                   Password <span className="text-red-500">*</span>
                 </label>
-                <Link href="#" className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400">Forgot password?</Link>
+                <Link href="#" className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400">
+                  Forgot password?
+                </Link>
               </div>
               <div className="relative">
                 <input
                   {...register("password")}
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
-                  className={`w-full px-3 py-2.5 pr-10 text-sm rounded-xl border bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${errors.password ? "border-red-400" : "border-slate-200 dark:border-slate-700"}`}
+                  className={inputClass(!!errors.password) + " pr-10"}
                 />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
@@ -134,10 +143,12 @@ export default function LoginPage() {
         </div>
 
         <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-6">
-          Don't have an account?{" "}
-          <Link href="/register" className="text-blue-600 hover:text-blue-700 dark:text-blue-400 font-medium">Create account</Link>
+          Don&apos;t have an account?{" "}
+          <Link href="/register" className="text-blue-600 hover:text-blue-700 dark:text-blue-400 font-medium">
+            Register
+          </Link>
         </p>
       </div>
     </div>
-  )
+  );
 }

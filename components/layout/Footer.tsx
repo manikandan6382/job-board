@@ -1,5 +1,5 @@
-import Link from "next/link"
-import { Briefcase, Globe, Mail, ExternalLink } from "lucide-react"
+import Link from "next/link";
+import { Briefcase, ExternalLink, Mail } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -10,28 +10,32 @@ export default function Footer() {
           {/* Brand */}
           <div className="sm:col-span-2 md:col-span-1">
             <Link href="/" className="inline-flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                 <Briefcase className="w-4 h-4 text-white" />
               </div>
               <span className="font-bold text-lg text-slate-900 dark:text-white">JobBoard</span>
             </Link>
-            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-xs">
+            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-xs mb-4">
               Find your dream job or hire the best talent. Thousands of jobs from top companies.
             </p>
-            <div className="flex items-center gap-3 mt-5">
-              {[
-                { icon: Globe, label: "website" },
-                { icon: Mail, label: "email" },
-                { icon: ExternalLink, label: "link" },
-              ].map(({ icon: Icon, label }) => (
-                <a
-                  key={label}
-                  href="#"
-                  className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                >
-                  <Icon className="w-4 h-4" />
-                </a>
-              ))}
+            <p className="text-xs text-slate-400">Made with ❤️ by Manikandan M</p>
+            <div className="flex items-center gap-3 mt-4">
+              <a
+                href="https://github.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              >
+                <ExternalLink className="w-4 h-4" />
+              </a>
+              <a
+                href="https://linkedin.com/in/mani-kandan-ui"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              >
+                <Mail className="w-4 h-4" />
+              </a>
             </div>
           </div>
 
@@ -45,7 +49,10 @@ export default function Footer() {
                 { label: "Create Account", href: "/register" },
               ].map(({ label, href }) => (
                 <li key={label}>
-                  <Link href={href} className="text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                  <Link
+                    href={href}
+                    className="text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  >
                     {label}
                   </Link>
                 </li>
@@ -63,7 +70,10 @@ export default function Footer() {
                 { label: "My Jobs", href: "/dashboard/my-jobs" },
               ].map(({ label, href }) => (
                 <li key={label}>
-                  <Link href={href} className="text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                  <Link
+                    href={href}
+                    className="text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  >
                     {label}
                   </Link>
                 </li>
@@ -71,19 +81,24 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Company */}
+          {/* Connect */}
           <div>
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-4">Company</h3>
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-4">Connect</h3>
             <ul className="space-y-3">
               {[
+                { label: "GitHub", href: "https://github.com" },
+                { label: "LinkedIn", href: "https://linkedin.com/in/mani-kandan-ui" },
                 { label: "About Us", href: "#" },
-                { label: "Privacy Policy", href: "#" },
-                { label: "Terms of Service", href: "#" },
               ].map(({ label, href }) => (
                 <li key={label}>
-                  <Link href={href} className="text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                  <a
+                    href={href}
+                    target={href.startsWith("http") ? "_blank" : undefined}
+                    rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    className="text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  >
                     {label}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -95,13 +110,10 @@ export default function Footer() {
             © {new Date().getFullYear()} JobBoard. All rights reserved.
           </p>
           <p className="text-sm text-slate-400">
-            Built with ❤️ by{" "}
-            <a href="https://linkedin.com/in/mani-kandan-ui" target="_blank" className="text-blue-600 hover:text-blue-700 font-medium">
-              Manikandan M
-            </a>
+            Built with Next.js &amp; Tailwind CSS
           </p>
         </div>
       </div>
     </footer>
-  )
+  );
 }
