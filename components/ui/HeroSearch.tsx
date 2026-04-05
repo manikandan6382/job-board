@@ -77,7 +77,7 @@ function AutocompleteField({
         placeholder={placeholder}
         onChange={(e) => handleChange(e.target.value)}
         onFocus={handleFocus}
-        className="flex-1 outline-none text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-400 bg-transparent"
+        className="flex-1 outline-none ring-0 focus:outline-none focus:ring-0 text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-400 bg-transparent"
         autoComplete="off"
       />
       {show && filtered.length > 0 && (
@@ -114,7 +114,7 @@ export default function HeroSearch() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl shadow-black/30 max-w-2xl mx-auto overflow-visible border border-slate-200 dark:border-slate-700">
+    <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl shadow-black/30 max-w-2xl mx-auto overflow-visible border border-slate-200 dark:border-slate-700 focus-within:outline-none">
       <div className="flex flex-col sm:flex-row">
         <AutocompleteField
           icon={Search}
