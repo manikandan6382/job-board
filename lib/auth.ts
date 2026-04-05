@@ -35,24 +35,18 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    session({ session, token }) {
+    session({ session, user }) {
       if (session.user) {
-        session.user.id = token.sub!
-        session.user.role = token.role
+        session.user.id = user.id
+        session.user.role = (user as any).role
       }
       return session
-    },
-    jwt({ token, user }) {
-      if (user) {
-        token.role = user.role
-      }
-      return token
     },
   },
   pages: {
     signIn: "/login",
   },
   session: {
-    strategy: "jwt",
+    strategy: "database",
   },
 }
